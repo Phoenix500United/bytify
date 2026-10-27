@@ -14,11 +14,12 @@ fn isNumber(c: u8) bool {
 
 fn getStartSyntax(o: u8, i: u8) []const u8 {
     const lang_index: u8 = (o & LANG_OPPERATOR) >> 1;
-    const mutable_index: u8 = i & @intFromEnum(InputFlag.MUTABLE);
-    const lookup = [_][2][]const u8{
-        .{ "const unsigned char ", "unsighed char" },
-    };
-    return lookup[lang_index][mutable_index];
+    const mutable_index: u8 = (i & @intFromEnum(InputFlag.MUTABLE)) >> 1;
+    const string_index: u8 = (i & @intFromEnum(InputFlag.STRING));
+    const lookup = [_][2][2][]const u8{.{
+        .{ "const unsigned char ", "unsighed char" }, .{ "const char", "char" },
+    }};
+    return lookup[lang_index][string_index][mutable_index];
 }
 
 fn getMiddleSyntax(o: u8) []const u8 {
